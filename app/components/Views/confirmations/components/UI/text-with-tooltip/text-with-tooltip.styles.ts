@@ -1,10 +1,18 @@
 import { StyleSheet } from 'react-native';
 
-import { Theme } from '../../../../../../util/theme/models';
+import { AppThemeKey, Theme } from '../../../../../../util/theme/models';
+import {
+  getElevatedSurfaceColor,
+  isPureBlackEnabled,
+} from '../../../../../../util/theme/themeUtils';
 import { fontStyles } from '../../../../../../styles/common';
 
 const styleSheet = (params: { theme: Theme }) => {
   const { theme } = params;
+  const { colors } = theme;
+  const isPureBlackDark =
+    isPureBlackEnabled && theme.themeAppearance === AppThemeKey.dark;
+
 
   return StyleSheet.create({
     backIcon: {
@@ -13,7 +21,10 @@ const styleSheet = (params: { theme: Theme }) => {
       position: 'absolute',
     },
     container: {
-      backgroundColor: theme.colors.background.default,
+      // TODO(Pure Black): Remove once MMDS ships pure-black-aware surface tokens.
+      backgroundColor: getElevatedSurfaceColor(theme),
+      borderWidth: isPureBlackDark ? 1 : 0,
+      borderColor: isPureBlackDark ? colors.border.muted : undefined,
       paddingHorizontal: 8,
       paddingVertical: 8,
     },
