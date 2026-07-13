@@ -1,12 +1,20 @@
 import { StyleSheet } from 'react-native';
-import { Theme } from '@metamask/design-tokens';
+import { AppThemeKey, Theme } from '../../../../../../../../../util/theme/models';
+import {
+  getElevatedSurfaceColor,
+  isPureBlackEnabled,
+} from '../../../../../../../../../util/theme/themeUtils';
 import {
   fontStyles,
   colors as importedColors,
 } from '../../../../../../../../../styles/common';
 
-const styleSheet = (colors: Theme['colors']) =>
-  StyleSheet.create({
+const styleSheet = (theme: Theme) => {
+  const { colors } = theme;
+  const isPureBlackDark =
+    isPureBlackEnabled && theme.themeAppearance === AppThemeKey.dark;
+
+  return StyleSheet.create({
     wrapper: {
       marginLeft: 'auto',
       maxWidth: '100%',
@@ -61,7 +69,9 @@ const styleSheet = (colors: Theme['colors']) =>
       color: colors.error.default,
     },
     valueModal: {
-      backgroundColor: colors.background.muted,
+      backgroundColor: getElevatedSurfaceColor(theme),
+      borderWidth: isPureBlackDark ? 1 : 0,
+      borderColor: isPureBlackDark ? colors.border.muted : undefined,
       paddingTop: 24,
       paddingBottom: 34,
       paddingHorizontal: 16,
@@ -94,5 +104,6 @@ const styleSheet = (colors: Theme['colors']) =>
       textAlign: 'center',
     },
   });
+};
 
 export default styleSheet;
